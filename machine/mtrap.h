@@ -1,3 +1,5 @@
+// See LICENSE for license details.
+
 #ifndef _RISCV_MTRAP_H
 #define _RISCV_MTRAP_H
 
@@ -64,6 +66,8 @@ void putstring(const char* s);
 #define die(str, ...) ({ printm("%s:%d: " str "\n", __FILE__, __LINE__, ##__VA_ARGS__); poweroff(-1); })
 
 void enter_supervisor_mode(void (*fn)(uintptr_t), uintptr_t arg0, uintptr_t arg1)
+  __attribute__((noreturn));
+void enter_machine_mode(void (*fn)(uintptr_t, uintptr_t), uintptr_t arg0, uintptr_t arg1)
   __attribute__((noreturn));
 void boot_loader(uintptr_t dtb);
 void boot_other_hart(uintptr_t dtb);

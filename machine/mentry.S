@@ -2,6 +2,7 @@
 
 #include "mtrap.h"
 #include "bits.h"
+#include "config.h"
 
   .data
   .align 6
@@ -18,7 +19,11 @@ trap_table:
   .word bad_trap
   .word mcall_trap
   .word bad_trap
+#ifdef BBL_BOOT_MACHINE
+  .word mcall_trap
+#else
   .word bad_trap
+#endif /* BBL_BOOT_MACHINE */
   .word bad_trap
 #define TRAP_FROM_MACHINE_MODE_VECTOR 13
   .word __trap_from_machine_mode
@@ -48,7 +53,7 @@ trap_vector:
   li a0, IRQ_M_TIMER * 2
   bne a0, a1, 1f
 
-  # Yes.  Simply clear MSIE and raise SSIP.
+  # Yes.  Simply clear MTIE and raise STIP.
   li a0, MIP_MTIP
   csrc mie, a0
   li a0, MIP_STIP
