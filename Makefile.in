@@ -60,7 +60,12 @@ ifeq (@WITH_ARCH@,)
 else
   march := -march=@WITH_ARCH@
 endif
-is_32bit := $(findstring 32,$(march))
+ifeq ($(march),-march=)
+  march :=
+  is_32bit := $(findstring 32,$(shell @CC@ -dumpmachine 2>&1 | cut -f 1 -d -))
+else
+  is_32bit := $(findstring 32,$(march))
+endif
 mabi := -mabi=$(if $(is_32bit),ilp32,lp64)
 
 # Installation directories
